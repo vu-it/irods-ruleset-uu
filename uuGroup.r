@@ -785,6 +785,19 @@ uuGroupUserAdd(*groupName, *user, *status, *message) {
 	}
 }
 
+
+# \brief Enroll external user for COmanage.
+#
+# \param[in]  user      the user to enroll for COmanage
+# \param[out] status    zero on success, non-zero on failure
+# \param[out] message   a user friendly error message, may contain the reason why an action was disallowed
+#
+uuGroupExternalUserEnroll(*user, *status, *message) {
+	*status  = 1;
+	*message = "An internal error occured.";
+}
+
+
 # \brief Remove a user from a group.
 #
 # \param[in]  groupName
