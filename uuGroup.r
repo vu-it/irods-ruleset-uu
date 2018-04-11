@@ -792,9 +792,27 @@ uuGroupUserAdd(*groupName, *user, *status, *message) {
 # \param[out] status    zero on success, non-zero on failure
 # \param[out] message   a user friendly error message, may contain the reason why an action was disallowed
 #
-uuGroupExternalUserEnroll(*user, *status, *message) {
+uuGroupExternalUserEnroll(*groupName, *user, *base64User, *status, *message) {
 	*status  = 1;
 	*message = "An internal error occured.";
+
+	uuGetUserAndZone(*user, *userName, *userZone);
+	*fullName = "*userName#*userZone";
+
+	uuUserExists(*fullName, *exists);
+	if (!*exists) {
+		uuGroupPolicyCanGroupUserAdd(uuClientFullName, *groupName, *fullName, *allowed, *reason);
+		if (*allowed == 0) {
+		   *message = *reason;
+		   succeed;
+		}
+		*status = 0;
+		*message = "User does not exist, enrolled.";
+		succeed;
+	}
+
+	*status = 0;
+	*message = "User does exist, not enrolled.";
 }
 
 
