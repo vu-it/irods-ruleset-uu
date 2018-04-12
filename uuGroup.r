@@ -803,11 +803,18 @@ uuGroupExternalUserEnroll(*groupName, *user, *base64User, *status, *message) {
         if (!*exists) {
                 uuGroupPolicyCanGroupUserAdd(uuClientFullName, *groupName, *fullName, *allowed, *reason);
                 if (*allowed == 0) {
-                   *message = *reason;
-                   succeed;
+                       *message = *reason;
+                       succeed;
                 }
 
-		*url = "https://portal.yoda.test/"
+		# Retrieve COmanage REST API from system collection configuration
+		*sysColl = "/" ++ $rodsZoneClient ++ UUSYSTEMCOLLECTION;
+		foreach(*row in SELECT META_COLL_ATTR_VALUE WHERE COLL_NAME = *sysColl AND META_COLL_ATTR_NAME = UUORGMETADATAPREFIX ++ 'comanage_rest_api') {
+			*comanage_rest_api = *row.META_COLL_ATTR_VALUE;
+		}
+
+		*url = *comanage_rest_api ++ "/" ++ *base64User;
+		writeLine("serverLog", "Called COmanage REST API: *url");
 		msiEnrollExternalUser(*url, *httpCode);
 	        if (*httpCode == "201") {
                         writeLine("serverLog", "User *fullname enrolled in COmanage.");
