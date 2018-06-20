@@ -31,7 +31,7 @@
 # \param[in] name
 #
 uuUserNameIsValid(*name)
-	= *name like regex ``([a-z.]+|[a-z0-9_.-]+@[a-z0-9_.-]+)(#[a-zA-Z0-9_-]+)?``;
+	= *name like regex ``([a-z.]+|[a-z]+[0-9]+|[a-z0-9_.-]+@[a-z0-9_.-]+)(#[a-zA-Z0-9_-]+)?``;
 
 # \brief Check if a group name is valid.
 #
